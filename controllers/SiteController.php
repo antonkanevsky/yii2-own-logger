@@ -61,6 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        Yii::warning('Test warning from ' . __METHOD__);
         return $this->render('index');
     }
 
