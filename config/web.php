@@ -29,11 +29,20 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+            'class' => 'App\mail\Mailer',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport'  => true,
+            'fileTransportPath' => '@runtime/logs',
+            'fileTransportCallback' => function() {
+                return 'mail.txt';
+            }
+        ],
+        'sms' => [
+            // send all sms to a file.
+            'class' => 'App\sms\SimpleSmsSender',
+            'logFile' => '@runtime/logs/sms.txt',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -41,6 +50,15 @@ $config = [
                 [
                     'class' => 'App\log\CustomTarget',
                     'levels' => ['error', 'warning'],
+                    'sms' => [
+                        'from' => ['support@yii2-logger.loc'],
+                        'to'   => ['+79179000000']
+                    ],
+                    'message' => [
+                        'from' => ['support@yii2-logger.loc'],
+                        'to'   => ['admin@yii2-logger.loc', 'developer@yii2-logger.loc'],
+                        'subject' => 'Ошибки на сайте yii2-logger.loc',
+                    ],
                 ],
             ],
         ],
